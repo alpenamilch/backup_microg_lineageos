@@ -5,7 +5,7 @@ on:
     inputs:
       logLevel:
         description: 'Log level'
-        required: true
+        required: false
         default: 'warning'
         type: choice
         options:
@@ -16,11 +16,10 @@ on:
         description: 'Test scenario tags'
         required: false
         type: boolean
-
 # push:
 #   branches: [ master ]
   schedule:
-    - cron: '30 5 * * *'
+    - cron: '40 17 * * *'
     
 jobs:
 
