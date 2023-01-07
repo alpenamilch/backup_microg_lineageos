@@ -48,5 +48,6 @@ jobs:
       run: |
         sed -i "s/github_pat_CHANGEME/$MY_PAT/g" script_wade
         chmod +x script_wade
+        sudo apt-get install -y rename > /dev/null 2>&1
         echo "Running script now............"
         ./script_wade
