@@ -22,9 +22,8 @@ echo $i
 wget --quiet --wait 2 --random-wait $i
 done
 
-find .
-
-for i in `find . -type f \( -iname lineage\*m -o -iname lineage\*.zip -o -iname lineage\*img -iname lineage\*256 \) -printf '%f\n'`
+echo "Uploading "
+for i in `find . -type f \( -iname lineage\*m -o -iname lineage\*.zip -o -iname lineage\*img -o -iname lineage\*256 \) -printf '%f\n'`
 do
 echo $i
 github-release upload --user alpenamilch \
