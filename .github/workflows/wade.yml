@@ -1,0 +1,52 @@
+name: lineage wade
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+
+# push:
+#   branches: [ master ]
+  schedule:
+    - cron: '30 5 * * *'
+    
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.19
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.19
+      id: go
+
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Installing github-release
+      run: |
+        go install github.com/github-release/github-release@latest > /dev/null 2>&1
+
+    - name: Change PAT and running script
+      env:
+        MY_PAT: ${{ secrets.MY_PAT }}
+      run: |
+        sed -i "s/github_pat_CHANGEME/$MY_PAT/g" script_wade
+        chmod +x script_wade
+        echo "Running script now............"
+        ./script_wade
