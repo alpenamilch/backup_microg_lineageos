@@ -16,20 +16,30 @@ IGNORECASE=1
   }
 }' wade | grep mirrorbits | head -4 > list_of_wade
 
+github-release  info --user alpenamilch \
+   --repo backup_microg_lineageos \
+   | grep artifact  > current_files_in_github
+
 for i in `cat list_of_wade`
 do
 echo $i
+echo "Downloading zip"
 wget --quiet --wait 2 --random-wait $i
 done
 
 echo "Uploading "
 for i in `find . -type f \( -iname lineage\*m -o -iname lineage\*.zip -o -iname lineage\*img -o -iname lineage\*256 \) -printf '%f\n'`
 do
-echo $i
-github-release upload --user alpenamilch \
-   --repo backup_microg_lineageos \
-   --tag wade  \
-   --file $i --name $i
-rm -fr $i
-sleep 2
+  if grep $i current_files_in_github > /dev/null
+    echo $i " exists in github"
+    rm -f $i
+  else
+    echo $i " is a new file"
+    github-release upload --user alpenamilch \
+          --repo backup_microg_lineageos \
+          --tag wade  \
+          --file $i --name $i
+    rm -fr $i
+    sleep 1
+  fi
 done
