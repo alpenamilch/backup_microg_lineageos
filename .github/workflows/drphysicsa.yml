@@ -1,0 +1,46 @@
+name: lineage wade
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: false
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+# push:
+#   branches: [ master ]
+  schedule:
+    - cron: '40 17 * * 1'
+    
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Installing github-release
+      run: |
+        go install github.com/github-release/github-release@latest > /dev/null 2>&1
+
+    - name: Change PAT and running script
+      env:
+        MY_PD_API_KEY: ${{ secrets.MY_PD_API_KEY }}
+      run: |
+        #sed -i "s/github_pat_CHANGEME/$MY_PAT/g" script_wade
+        #chmod +x script_wade
+        #sudo apt-get install -y rename > /dev/null 2>&1
+        #echo "Running script now............"
+        #./script_wade
